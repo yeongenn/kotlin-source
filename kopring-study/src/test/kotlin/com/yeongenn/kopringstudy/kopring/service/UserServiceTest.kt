@@ -1,6 +1,7 @@
 package com.yeongenn.kopringstudy.kopring.service
 
 import com.yeongenn.kopringstudy.kopring.domain.dto.UserCreateRequest
+import com.yeongenn.kopringstudy.kopring.domain.dto.UserUpdateRequest
 import com.yeongenn.kopringstudy.kopring.domain.entity.User
 import com.yeongenn.kopringstudy.kopring.repository.UserRepository
 import org.junit.jupiter.api.Test
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.DisplayName
 
 @SpringBootTest
 class UserServiceTest @Autowired constructor(
@@ -21,6 +23,7 @@ class UserServiceTest @Autowired constructor(
     }
 
     @Test
+    @DisplayName("유저 추가 체크")
     fun addUserTest(){
         // given
         val req = UserCreateRequest("user1", "user1pw", "user1@test.com", "stella")
@@ -42,6 +45,7 @@ class UserServiceTest @Autowired constructor(
     }
 
     @Test
+    @DisplayName("전체 유저 조회 체크")
     fun getUserTest(){
         // given
         userRepository.saveAll(listOf(
@@ -59,6 +63,34 @@ class UserServiceTest @Autowired constructor(
 
         //userRepository.deleteAll()
 
+    }
+
+    @Test
+    @DisplayName("유저 수정 체크")
+    fun updateUserTest(){
+        // given
+        val savedUser = userRepository.save(User("user1@test.com", "user1pw", "stella", "user1"))
+        val req = UserUpdateRequest(savedUser.userId!!, "eugene", "user1@test.com", "user1pw")
+
+        // when
+        userService.updateUser(req)
+
+        val result = userRepository.findAll()[0]
+        assertThat(result.name).isEqualTo("eugene")
+
+    }
+
+    @Test
+    @DisplayName("유저 삭제 체크")
+    fun deleteUserTest(){
+        // given
+        userRepository.save(User("user1@test.com", "user1pw", "stella", "user1"))
+
+        // when
+        userService.deleteUser("user1")
+
+        // then
+        assertThat(userRepository.findAll()).isEmpty()
     }
 
 
