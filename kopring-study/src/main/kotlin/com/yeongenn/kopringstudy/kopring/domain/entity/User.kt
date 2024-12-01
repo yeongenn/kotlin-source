@@ -1,14 +1,20 @@
 package com.yeongenn.kopringstudy.kopring.domain.entity
 
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
 
 
 @Entity
-class User (
+class User(
     var email: String,
     var password: String,
     var name: String,
+
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val userLoanHistories: MutableList<UserLoanHistory> = mutableListOf(),
+
     @Id
     val userId: String? = null
 ) {
@@ -24,15 +30,23 @@ class User (
 
      */
 
-    fun changeEmail(newEmail: String){
+    fun changeEmail(newEmail: String) {
         this.email = newEmail
     }
 
-    fun changePassword(newPassword: String){
+    fun changePassword(newPassword: String) {
         this.password = newPassword
     }
 
-    fun changeName(newName: String){
+    fun changeName(newName: String) {
         this.name = newName
+    }
+
+    fun loanBook(book: Book) {
+        this.userLoanHistories.add(UserLoanHistory(this, book.title))
+    }
+
+    fun returnBook(bookTitle: String) {
+        this.userLoanHistories.first { history -> history.bookTitle == bookTitle }.doReturn()
     }
 }

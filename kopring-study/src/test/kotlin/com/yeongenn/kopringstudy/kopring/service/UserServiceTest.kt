@@ -49,9 +49,12 @@ class UserServiceTest @Autowired constructor(
     fun getUserTest(){
         // given
         userRepository.saveAll(listOf(
-            User("user1@test.com", "user1pw", "stella", "user1"),
-            User("user2@test.com", "user2pw", "yeong", "user2"),
-            User("user3@test.com", "user3pw", "alice", "user3")
+//            User("user1@test.com", "user1pw", "stella", "user1"),
+//            User("user2@test.com", "user2pw", "yeong", "user2"),
+//            User("user3@test.com", "user3pw", "alice", "user3")
+            User("user1@test.com", "user1pw", "stella", mutableListOf(),"user1"),
+            User("user2@test.com", "user2pw", "yeong", mutableListOf(),"user2"),
+            User("user3@test.com", "user3pw", "alice", mutableListOf(),"user3")
         ))
 
         // when
@@ -69,7 +72,7 @@ class UserServiceTest @Autowired constructor(
     @DisplayName("유저 수정 체크")
     fun updateUserTest(){
         // given
-        val savedUser = userRepository.save(User("user1@test.com", "user1pw", "stella", "user1"))
+        val savedUser = userRepository.save(User("user1@test.com", "user1pw", "stella", mutableListOf(),"user1"))
         val req = UserUpdateRequest(savedUser.userId!!, "eugene", "user1@test.com", "user1pw")
 
         // when
@@ -84,7 +87,7 @@ class UserServiceTest @Autowired constructor(
     @DisplayName("유저 삭제 체크")
     fun deleteUserTest(){
         // given
-        userRepository.save(User("user1@test.com", "user1pw", "stella", "user1"))
+        userRepository.save(User("user1@test.com", "user1pw", "stella", mutableListOf(),"user1"))
 
         // when
         userService.deleteUser("user1")
