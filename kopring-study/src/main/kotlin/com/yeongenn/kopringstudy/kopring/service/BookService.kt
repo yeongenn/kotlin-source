@@ -22,7 +22,7 @@ class BookService @Autowired constructor (
 
     // 책 등록
     fun addBook(req: BookRequest){
-        bookRepository.save(Book(req.title))
+        bookRepository.save(Book(req.title, req.type))
     }
 
     // 책 대출
