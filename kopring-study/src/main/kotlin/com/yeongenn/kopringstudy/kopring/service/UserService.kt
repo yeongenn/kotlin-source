@@ -1,8 +1,11 @@
 package com.yeongenn.kopringstudy.kopring.service
 
+import com.yeongenn.kopringstudy.kopring.domain.dto.BookHistoryResponse
 import com.yeongenn.kopringstudy.kopring.domain.dto.UserCreateRequest
+import com.yeongenn.kopringstudy.kopring.domain.dto.UserLoanHistoryResponse
 import com.yeongenn.kopringstudy.kopring.domain.dto.UserUpdateRequest
 import com.yeongenn.kopringstudy.kopring.domain.entity.User
+import com.yeongenn.kopringstudy.kopring.domain.entity.UserLoanStatus
 import com.yeongenn.kopringstudy.kopring.repository.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
@@ -50,5 +53,21 @@ class UserService @Autowired constructor(
     @Transactional
     fun deleteUser(userId: String) {
         userRepository.deleteById(userId)
+    }
+
+    // 대출 이력 조회
+    @Transactional // lazyinitializationexception 해걸하는데 좋은 방법은 아니라고 하던데..?
+    fun getUserLoanHistories(): List<UserLoanHistoryResponse> {
+        return userRepository.findAll().map { user ->
+            UserLoanHistoryResponse(
+                name = user.name,
+                books = user.userLoanHistories.map { history ->
+                    BookHistoryResponse(
+                        title = history.bookTitle,
+                        isReturn = history.status == UserLoanStatus.RETURNED
+                    )
+                }
+            )
+        }
     }
 }

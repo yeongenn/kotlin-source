@@ -3,6 +3,9 @@ package com.yeongenn.kopringstudy.kopring.service
 import com.yeongenn.kopringstudy.kopring.domain.dto.UserCreateRequest
 import com.yeongenn.kopringstudy.kopring.domain.dto.UserUpdateRequest
 import com.yeongenn.kopringstudy.kopring.domain.entity.User
+import com.yeongenn.kopringstudy.kopring.domain.entity.UserLoanHistory
+import com.yeongenn.kopringstudy.kopring.domain.entity.UserLoanStatus
+import com.yeongenn.kopringstudy.kopring.repository.UserLoanHistoryRepository
 import com.yeongenn.kopringstudy.kopring.repository.UserRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,6 +19,9 @@ class UserServiceTest @Autowired constructor(
     private val userService: UserService,
     private val userRepository: UserRepository
 ){
+
+    @Autowired
+    private lateinit var userLoanHistoryRepository: UserLoanHistoryRepository
 
     @AfterEach
     fun clean(){
@@ -95,6 +101,53 @@ class UserServiceTest @Autowired constructor(
         // then
         assertThat(userRepository.findAll()).isEmpty()
     }
+
+    /*
+    대출 이력 조회 테스트
+    1. 사용자가 지금까지 한번도 책 빌리지 않은 경우
+    2. 사용자가 책을 빌리고 아직 반납하지 않은 겨웅
+    3. 사용자가 책을 빌리고 반납한 경우
+    4. 사용자가 책 여러권을 빌렸는데, 반납을 한 책도 있고 아닌 책도 있는 경우
+     */
+    @Test
+    @DisplayName("대출 기록이 없는 유저도 응답에 포함")
+    fun getUserLoanHistoriesTest1(){
+        // given
+        userRepository.save(User("user1@test.com", "user1pw", "stella", mutableListOf(),"user1"))
+
+        // when
+        val results = userService.getUserLoanHistories()
+
+        // then
+        assertThat(results).hasSize(1)
+        assertThat(results[0].name).isEqualTo("stella")
+        assertThat(results[0].books).isEmpty()
+    }
+
+    @Test
+    @DisplayName("대출 기록이 많은 유저의 응답이 정상 동작") // 4번을 통해 2, 3번은 자동으로 체크된다
+    fun getUserLoanHistoriesTest4(){
+        // given
+        val savedUser = userRepository.save(User("user1@test.com", "user1pw", "stella", mutableListOf(),"user1"))
+        userLoanHistoryRepository.saveAll(listOf(
+            UserLoanHistory(savedUser, "book1", UserLoanStatus.LOANED),
+            UserLoanHistory(savedUser, "book2", UserLoanStatus.LOANED),
+            UserLoanHistory(savedUser, "book3", UserLoanStatus.RETURNED),
+        ))
+
+        // when
+        val results = userService.getUserLoanHistories()
+
+        // then
+        assertThat(results).hasSize(1)
+        assertThat(results[0].name).isEqualTo("stella")
+        assertThat(results[0].books).hasSize(3)
+        assertThat(results[0].books).extracting("title").containsExactlyInAnyOrder("book1", "book2", "book3")
+        assertThat(results[0].books).extracting("isReturn").containsExactlyInAnyOrder(false, false, true)
+    }
+
+    // 위 두 테스트 코드를 합칠 수도 있지만, 복잡한 테스트 1개보다는 간단한 테스트 2개가 유지보수에는 용이하겠지?
+
 
 
 }
