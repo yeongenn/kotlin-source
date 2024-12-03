@@ -1,16 +1,16 @@
 package com.yeongenn.kopringstudy.kopring.domain.entity
 
-import jakarta.persistence.CascadeType
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.OneToMany
+import jakarta.persistence.*
 
 
 @Entity
-class User(
+class User constructor(
     var email: String,
     var password: String,
     var name: String,
+
+//    @Enumerated(EnumType.STRING)
+//    val status: UserStatus,
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
     val userLoanHistories: MutableList<UserLoanHistory> = mutableListOf(),
@@ -50,3 +50,9 @@ class User(
         this.userLoanHistories.first { history -> history.bookTitle == bookTitle }.doReturn()
     }
 }
+
+//enum class UserStatus { // 유저 상태
+//    ACTIVE,
+//    IN_ACTIVE, // 휴면
+//    DELETED // 탈퇴
+//}

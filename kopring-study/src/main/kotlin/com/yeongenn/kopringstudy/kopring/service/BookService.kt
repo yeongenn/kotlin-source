@@ -4,6 +4,7 @@ import com.yeongenn.kopringstudy.kopring.domain.dto.BookLoanRequest
 import com.yeongenn.kopringstudy.kopring.domain.dto.BookRequest
 import com.yeongenn.kopringstudy.kopring.domain.dto.BookReturnRequest
 import com.yeongenn.kopringstudy.kopring.domain.entity.Book
+import com.yeongenn.kopringstudy.kopring.domain.entity.UserLoanStatus
 import com.yeongenn.kopringstudy.kopring.repository.BookRepository
 import com.yeongenn.kopringstudy.kopring.repository.UserLoanHistoryRepository
 import com.yeongenn.kopringstudy.kopring.repository.UserRepository
@@ -28,7 +29,8 @@ class BookService @Autowired constructor (
     // 책 대출
     @Transactional
     fun loanBook(req: BookLoanRequest){
-        if(userLoanHistoryRepository.findByBookTitleAndIsReturn(req.bookTitle, 'N') != null){
+        //if(userLoanHistoryRepository.findByBookTitleAndIsReturn(req.bookTitle, 'N') != null){
+        if(userLoanHistoryRepository.findByBookTitleAndStatus(req.bookTitle, UserLoanStatus.LOANED) != null){
             throw IllegalArgumentException("this book is not yet returned.")
         }
 

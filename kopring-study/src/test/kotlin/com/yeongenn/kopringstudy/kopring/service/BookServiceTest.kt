@@ -3,10 +3,7 @@ package com.yeongenn.kopringstudy.kopring.service
 import com.yeongenn.kopringstudy.kopring.domain.dto.BookLoanRequest
 import com.yeongenn.kopringstudy.kopring.domain.dto.BookRequest
 import com.yeongenn.kopringstudy.kopring.domain.dto.BookReturnRequest
-import com.yeongenn.kopringstudy.kopring.domain.entity.Book
-import com.yeongenn.kopringstudy.kopring.domain.entity.BookType
-import com.yeongenn.kopringstudy.kopring.domain.entity.User
-import com.yeongenn.kopringstudy.kopring.domain.entity.UserLoanHistory
+import com.yeongenn.kopringstudy.kopring.domain.entity.*
 import com.yeongenn.kopringstudy.kopring.repository.BookRepository
 import com.yeongenn.kopringstudy.kopring.repository.UserLoanHistoryRepository
 import com.yeongenn.kopringstudy.kopring.repository.UserRepository
@@ -68,7 +65,8 @@ class BookServiceTest @Autowired constructor(
         assertThat(results).hasSize(1)
         assertThat(results[0].bookTitle).isEqualTo("Alice in wonderland")
         assertThat(results[0].user.userId).isEqualTo(addedUser.userId)
-        assertThat(results[0].isReturn).isEqualTo('N')
+        //assertThat(results[0].isReturn).isEqualTo('N')
+        assertThat(results[0].status).isEqualTo(UserLoanStatus.LOANED)
     }
 
     @Test
@@ -78,7 +76,8 @@ class BookServiceTest @Autowired constructor(
         //bookRepository.save(Book("Alice in wonderland"))
         bookRepository.save(Book.fixture()) // test fixture
         val addedUser = userRepository.save(User("user1@test.com", "user1pw", "manon", mutableListOf(), "user1"))
-        userLoanHistoryRepository.save(UserLoanHistory(addedUser, "Alice in wonderland", 'N'))
+        //userLoanHistoryRepository.save(UserLoanHistory(addedUser, "Alice in wonderland", 'N'))
+        userLoanHistoryRepository.save(UserLoanHistory.fixture(addedUser))
         val req = BookLoanRequest("user1", "Alice in wonderland")
 
         // when & then
@@ -96,8 +95,9 @@ class BookServiceTest @Autowired constructor(
         //bookRepository.save(Book("ABC"))
         bookRepository.save(Book.fixture()) // test fixture
         val addedUser = userRepository.save(User("user1@test.com", "user1pw", "manon", mutableListOf(), "user1"))
-        userLoanHistoryRepository.save(UserLoanHistory(addedUser, "ABC", 'N'))
-        val req = BookReturnRequest("user1", "ABC")
+        //userLoanHistoryRepository.save(UserLoanHistory(addedUser, "Alice in wonderland", 'N'))
+        userLoanHistoryRepository.save(UserLoanHistory.fixture(addedUser))
+        val req = BookReturnRequest("user1", "Alice in wonderland")
 
         // when
         bookService.returnBook(req)
@@ -105,6 +105,7 @@ class BookServiceTest @Autowired constructor(
         // then
         val results = userLoanHistoryRepository.findAll()
         assertThat(results).hasSize(1)
-        assertThat(results[0].isReturn).isEqualTo('Y')
+        //assertThat(results[0].isReturn).isEqualTo('Y')
+        assertThat(results[0].status).isEqualTo(UserLoanStatus.RETURNED)
     }
 }
