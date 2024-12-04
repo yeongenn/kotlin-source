@@ -58,7 +58,8 @@ class UserService @Autowired constructor(
     // 대출 이력 조회
     @Transactional // lazyinitializationexception 해걸하는데 좋은 방법은 아니라고 하던데..?
     fun getUserLoanHistories(): List<UserLoanHistoryResponse> {
-        return userRepository.findAll().map { user ->
+        //return userRepository.findAll().map { user ->
+        return userRepository.findAllWithHistories().map { user ->
             UserLoanHistoryResponse(
                 name = user.name,
                 books = user.userLoanHistories.map { history ->

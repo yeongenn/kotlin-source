@@ -23,10 +23,10 @@ class UserServiceTest @Autowired constructor(
     @Autowired
     private lateinit var userLoanHistoryRepository: UserLoanHistoryRepository
 
-    @AfterEach
-    fun clean(){
-        userRepository.deleteAll()
-    }
+//    @AfterEach
+//    fun clean(){
+//        userRepository.deleteAll()
+//    }
 
     @Test
     @DisplayName("유저 추가 체크")
@@ -130,9 +130,9 @@ class UserServiceTest @Autowired constructor(
         // given
         val savedUser = userRepository.save(User("user1@test.com", "user1pw", "stella", mutableListOf(),"user1"))
         userLoanHistoryRepository.saveAll(listOf(
-            UserLoanHistory(savedUser, "book1", UserLoanStatus.LOANED),
-            UserLoanHistory(savedUser, "book2", UserLoanStatus.LOANED),
-            UserLoanHistory(savedUser, "book3", UserLoanStatus.RETURNED),
+            UserLoanHistory.fixture(savedUser, "book1", UserLoanStatus.LOANED),
+            UserLoanHistory.fixture(savedUser, "book2", UserLoanStatus.LOANED),
+            UserLoanHistory.fixture(savedUser, "book3", UserLoanStatus.RETURNED),
         ))
 
         // when
