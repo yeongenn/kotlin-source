@@ -18,6 +18,10 @@ class UserLoanHistory(
     val id: Long? = null
 ) {
 
+    // 도메인 객체에 로직 넣어두면 나중에 필요한 경우 재활용 가능하다
+    val isReturn: Boolean
+        get() = this.status == UserLoanStatus.RETURNED // custom getter
+
     fun doReturn() {
         //this.isReturn = 'Y'
         this.status = UserLoanStatus.RETURNED

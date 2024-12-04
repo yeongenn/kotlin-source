@@ -59,16 +59,18 @@ class UserService @Autowired constructor(
     @Transactional // lazyinitializationexception 해걸하는데 좋은 방법은 아니라고 하던데..?
     fun getUserLoanHistories(): List<UserLoanHistoryResponse> {
         //return userRepository.findAll().map { user ->
-        return userRepository.findAllWithHistories().map { user ->
-            UserLoanHistoryResponse(
-                name = user.name,
-                books = user.userLoanHistories.map { history ->
-                    BookHistoryResponse(
-                        title = history.bookTitle,
-                        isReturn = history.status == UserLoanStatus.RETURNED
-                    )
-                }
-            )
-        }
+//        return userRepository.findAllWithHistories().map { user ->
+//            UserLoanHistoryResponse(
+//                name = user.name,
+//                books = user.userLoanHistories.map { history ->
+//                    BookHistoryResponse(
+//                        title = history.bookTitle,
+//                        isReturn = history.status == UserLoanStatus.RETURNED
+//                    )
+//                }
+//            )
+//        }
+        val users = userRepository.findAllWithHistories()
+        return users.map { user -> UserLoanHistoryResponse.of(user) } // 정적 팩토리 호출로 코드 간결화
     }
 }
