@@ -3,6 +3,7 @@ package com.yeongenn.kopringstudy.kopring.service
 import com.yeongenn.kopringstudy.kopring.domain.dto.BookLoanRequest
 import com.yeongenn.kopringstudy.kopring.domain.dto.BookRequest
 import com.yeongenn.kopringstudy.kopring.domain.dto.BookReturnRequest
+import com.yeongenn.kopringstudy.kopring.domain.dto.BookStatResponse
 import com.yeongenn.kopringstudy.kopring.domain.entity.*
 import com.yeongenn.kopringstudy.kopring.repository.BookRepository
 import com.yeongenn.kopringstudy.kopring.repository.UserLoanHistoryRepository
@@ -107,5 +108,50 @@ class BookServiceTest @Autowired constructor(
         assertThat(results).hasSize(1)
         //assertThat(results[0].isReturn).isEqualTo('Y')
         assertThat(results[0].status).isEqualTo(UserLoanStatus.RETURNED)
+    }
+
+    @Test
+    @DisplayName("책 대여 권수 정상 확인")
+    fun countLoanedBookTest(){
+        // given
+        val savedUser = userRepository.save(User("user1@test.com", "user1pw", "manon", mutableListOf(), "user1"))
+        userLoanHistoryRepository.saveAll(
+            listOf(
+                UserLoanHistory.fixture(savedUser, "A"),
+                UserLoanHistory.fixture(savedUser, "B", UserLoanStatus.RETURNED),
+                UserLoanHistory.fixture(savedUser, "A", UserLoanStatus.RETURNED),
+            )
+        )
+
+        // when
+        val result = bookService.countLoanedBook()
+
+        // then
+        assertThat(result).isEqualTo(1)
+    }
+
+    @Test
+    @DisplayName("분야별 책 권수 정상 확인")
+    fun getBookStatisticsTest(){
+        // given
+        bookRepository.saveAll(
+            listOf(
+                Book.fixture("A", BookType.LITERATURE),
+                Book.fixture("B", BookType.COMPUTER),
+                Book.fixture("C", BookType.COMPUTER),
+            )
+        )
+
+        // when
+        val result = bookService.getBookStatistics()
+
+        // then
+        assertThat(result).hasSize(2)
+        assertCount(result, BookType.COMPUTER, 2)
+        assertCount(result, BookType.LITERATURE, 1)
+    }
+
+    private fun assertCount(result: List<BookStatResponse>, type: BookType, expectedCount: Int) {
+        assertThat(result.first { it.type == type }.count).isEqualTo(expectedCount)
     }
 }

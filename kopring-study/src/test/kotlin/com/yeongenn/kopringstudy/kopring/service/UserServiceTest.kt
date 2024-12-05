@@ -23,10 +23,10 @@ class UserServiceTest @Autowired constructor(
     @Autowired
     private lateinit var userLoanHistoryRepository: UserLoanHistoryRepository
 
-//    @AfterEach
-//    fun clean(){
-//        userRepository.deleteAll()
-//    }
+    @AfterEach
+    fun clean(){
+        userRepository.deleteAll()
+    }
 
     @Test
     @DisplayName("유저 추가 체크")

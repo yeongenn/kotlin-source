@@ -3,34 +3,35 @@ package com.yeongenn.kopringstudy.kopring.service
 import com.yeongenn.kopringstudy.kopring.domain.dto.BookLoanRequest
 import com.yeongenn.kopringstudy.kopring.domain.dto.BookRequest
 import com.yeongenn.kopringstudy.kopring.domain.dto.BookReturnRequest
+import com.yeongenn.kopringstudy.kopring.domain.dto.BookStatResponse
 import com.yeongenn.kopringstudy.kopring.domain.entity.Book
 import com.yeongenn.kopringstudy.kopring.domain.entity.UserLoanStatus
 import com.yeongenn.kopringstudy.kopring.repository.BookRepository
 import com.yeongenn.kopringstudy.kopring.repository.UserLoanHistoryRepository
 import com.yeongenn.kopringstudy.kopring.repository.UserRepository
-import jakarta.transaction.Transactional
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import com.yeongenn.kopringstudy.kopring.util.fail
 import org.springframework.data.repository.findByIdOrNull
 
 @Service
-class BookService @Autowired constructor (
+class BookService @Autowired constructor(
     private val bookRepository: BookRepository,
     private val userRepository: UserRepository,
     private val userLoanHistoryRepository: UserLoanHistoryRepository
 ) {
 
     // 책 등록
-    fun addBook(req: BookRequest){
+    fun addBook(req: BookRequest) {
         bookRepository.save(Book(req.title, req.type))
     }
 
     // 책 대출
     @Transactional
-    fun loanBook(req: BookLoanRequest){
+    fun loanBook(req: BookLoanRequest) {
         //if(userLoanHistoryRepository.findByBookTitleAndIsReturn(req.bookTitle, 'N') != null){
-        if(userLoanHistoryRepository.findByBookTitleAndStatus(req.bookTitle, UserLoanStatus.LOANED) != null){
+        if (userLoanHistoryRepository.findByBookTitleAndStatus(req.bookTitle, UserLoanStatus.LOANED) != null) {
             throw IllegalArgumentException("this book is not yet returned.")
         }
 
@@ -43,8 +44,30 @@ class BookService @Autowired constructor (
     }
 
     @Transactional
-    fun returnBook(req: BookReturnRequest){
+    fun returnBook(req: BookReturnRequest) {
         val user = userRepository.findByIdOrNull(req.userId) ?: fail()
         user.returnBook(req.bookTitle)
+    }
+
+    // 현재 대여 중인 책의 권수 보여주기
+    @Transactional
+    fun countLoanedBook(): Int {
+        return userLoanHistoryRepository.findAllByStatus(UserLoanStatus.LOANED).size
+    }
+
+    // 분야 별로 등록되어 있는 책 권수 보여주기
+    // 리팩토링 전 - 로직이 복잡, 긴 call chain, 가변 변수가 많아 실수 가능성 O
+    @Transactional(readOnly = true)
+    fun getBookStatistics(): List<BookStatResponse> {
+//        val result = mutableListOf<BookStatResponse>()
+//        val books = bookRepository.findAll()
+//        for (book in books) {
+//            result.firstOrNull { dto -> dto.type == book.type }?.plusOne()
+//                ?: result.add(BookStatResponse(book.type, 1))
+//        }
+//        return result
+        return bookRepository.findAll()
+            .groupBy { book -> book.type } // group by 사용
+            .map { (type, books) -> BookStatResponse(type, books.size) }
     }
 }
