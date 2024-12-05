@@ -143,7 +143,7 @@ class BookServiceTest @Autowired constructor(
         )
 
         // when
-        val result = bookService.getBookStatistics()
+        val result = bookService.getBookStatistics_v3()
 
         // then
         assertThat(result).hasSize(2)

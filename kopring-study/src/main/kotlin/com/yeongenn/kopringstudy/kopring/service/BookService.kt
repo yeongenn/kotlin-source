@@ -56,9 +56,25 @@ class BookService @Autowired constructor(
     }
 
     // 분야 별로 등록되어 있는 책 권수 보여주기
-    // 리팩토링 전 - 로직이 복잡, 긴 call chain, 가변 변수가 많아 실수 가능성 O
-    @Transactional(readOnly = true)
-    fun getBookStatistics(): List<BookStatResponse> {
+    // v1 (for) - 딱 봐도 코드가 너무 길다, BookStatResponse의 count 필드가 노출
+//    @Transactional(readOnly = true)
+//    fun getBookStatistics_v1(): List<BookStatResponse> {
+//        val results = mutableListOf<BookStatResponse>()
+//        val books = bookRepository.findAll()
+//        for (book in books) {
+//            val target = results.firstOrNull { target -> book.type == target.type }
+//            if (target == null) {
+//                results.add(BookStatResponse(book.type, 1))
+//            } else {
+//                target.plusOne()
+//            }
+//        }
+//        return results
+//    }
+
+    // v2 (elvis) - 로직이 복잡, call chain이 길다, 마찬가지로 BookStatResponse의 count 필드가 노출
+//    @Transactional
+//    fun getBookStatistics_v2(): List<BookStatResponse> {
 //        val result = mutableListOf<BookStatResponse>()
 //        val books = bookRepository.findAll()
 //        for (book in books) {
@@ -66,6 +82,13 @@ class BookService @Autowired constructor(
 //                ?: result.add(BookStatResponse(book.type, 1))
 //        }
 //        return result
+//    }
+
+    // v3 (groupBy)
+    // 코드가 간결해지고 BookStatResponse의 count 필드가 final이 되어 의도치 않은 수정 예방
+    // BUT 전체 목록을 조회해서 그 갯수를 카운트하기 때문에 DB 부하 가능성 O
+    @Transactional
+    fun getBookStatistics_v3(): List<BookStatResponse> {
         return bookRepository.findAll()
             .groupBy { book -> book.type } // group by 사용
             .map { (type, books) -> BookStatResponse(type, books.size) }

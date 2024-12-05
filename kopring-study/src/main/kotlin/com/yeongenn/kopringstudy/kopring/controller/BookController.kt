@@ -35,7 +35,7 @@ class BookController @Autowired constructor(
      */
     @GetMapping("/book/stat")
     fun getBookStatistics(): ResponseEntity<CommonResponseDto<List<BookStatResponse>>> {
-        val bookStatList: List<BookStatResponse> = bookService.getBookStatistics()
+        val bookStatList: List<BookStatResponse> = bookService.getBookStatistics_v3()
         return ResponseEntity.ok(CommonResponseDto(true, bookStatList))
     }
 
