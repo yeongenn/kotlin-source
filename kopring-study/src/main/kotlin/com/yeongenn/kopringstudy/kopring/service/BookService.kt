@@ -52,7 +52,8 @@ class BookService @Autowired constructor(
     // 현재 대여 중인 책의 권수 보여주기
     @Transactional
     fun countLoanedBook(): Int {
-        return userLoanHistoryRepository.findAllByStatus(UserLoanStatus.LOANED).size
+        //return userLoanHistoryRepository.findAllByStatus(UserLoanStatus.LOANED).size
+        return userLoanHistoryRepository.countByStatus(UserLoanStatus.LOANED).toInt()
     }
 
     // 분야 별로 등록되어 있는 책 권수 보여주기
@@ -87,10 +88,17 @@ class BookService @Autowired constructor(
     // v3 (groupBy)
     // 코드가 간결해지고 BookStatResponse의 count 필드가 final이 되어 의도치 않은 수정 예방
     // BUT 전체 목록을 조회해서 그 갯수를 카운트하기 때문에 DB 부하 가능성 O
-    @Transactional
-    fun getBookStatistics_v3(): List<BookStatResponse> {
-        return bookRepository.findAll()
-            .groupBy { book -> book.type } // group by 사용
-            .map { (type, books) -> BookStatResponse(type, books.size) }
+//    @Transactional
+//    fun getBookStatistics_v3(): List<BookStatResponse> {
+//        return bookRepository.findAll()
+//            .groupBy { book -> book.type } // group by 사용
+//            .map { (type, books) -> BookStatResponse(type, books.size) }
+//    }
+
+    // v4 (JPQL) - 동일한 기능을 DB에서 처리하는 경우
+    @Transactional(readOnly = true)
+    fun getBookStatistics_v4(): List<BookStatResponse> {
+        return bookRepository.getStats()
     }
+
 }
