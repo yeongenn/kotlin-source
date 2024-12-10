@@ -1,9 +1,6 @@
 package com.yeongenn.kopringstudy.kopring.service
 
-import com.yeongenn.kopringstudy.kopring.domain.dto.BookHistoryResponse
-import com.yeongenn.kopringstudy.kopring.domain.dto.UserCreateRequest
-import com.yeongenn.kopringstudy.kopring.domain.dto.UserLoanHistoryResponse
-import com.yeongenn.kopringstudy.kopring.domain.dto.UserUpdateRequest
+import com.yeongenn.kopringstudy.kopring.domain.dto.*
 import com.yeongenn.kopringstudy.kopring.domain.entity.User
 import com.yeongenn.kopringstudy.kopring.domain.entity.UserLoanStatus
 import com.yeongenn.kopringstudy.kopring.repository.UserRepository
@@ -26,8 +23,10 @@ class UserService @Autowired constructor(
     }
 
     //
-    fun getUsers(): List<User> {
-        return userRepository.findAll()
+    fun getUsers(): List<UserResponse> {
+        //return userRepository.findAll()
+        val users: List<User> = userRepository.findAll()
+        return users.map { user -> UserResponse.of(user) }
     }
 
     // 유저 추가
