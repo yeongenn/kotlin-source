@@ -4,6 +4,7 @@ plugins {
     id("org.springframework.boot") version "3.4.0"
     id("io.spring.dependency-management") version "1.1.6"
     kotlin("plugin.jpa") version "1.9.25"
+    kotlin("kapt") version "1.9.10"
 }
 
 group = "com.yeongenn"
@@ -38,6 +39,10 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")  // 최신 버전 사용
+    implementation("com.querydsl:querydsl-kotlin:5.0.0") // 코틀린용 QueryDSL
+    kapt("com.querydsl:querydsl-apt:5.0.0:jakarta") // QueryDSL 코드 생성용 APT
 }
 
 kotlin {
@@ -55,3 +60,6 @@ allOpen {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+// Q 클래스 경로 설정
+sourceSets["main"].kotlin.srcDir("build/generated/source/kapt/main")
