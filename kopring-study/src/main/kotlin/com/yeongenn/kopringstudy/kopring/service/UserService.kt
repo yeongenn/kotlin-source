@@ -1,8 +1,10 @@
 package com.yeongenn.kopringstudy.kopring.service
 
-import com.yeongenn.kopringstudy.kopring.domain.dto.*
+import com.yeongenn.kopringstudy.kopring.domain.dto.request.UserCreateRequest
+import com.yeongenn.kopringstudy.kopring.domain.dto.request.UserUpdateRequest
+import com.yeongenn.kopringstudy.kopring.domain.dto.response.UserLoanHistoryResponse
+import com.yeongenn.kopringstudy.kopring.domain.dto.response.UserResponse
 import com.yeongenn.kopringstudy.kopring.domain.entity.User
-import com.yeongenn.kopringstudy.kopring.domain.entity.UserLoanStatus
 import com.yeongenn.kopringstudy.kopring.repository.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired

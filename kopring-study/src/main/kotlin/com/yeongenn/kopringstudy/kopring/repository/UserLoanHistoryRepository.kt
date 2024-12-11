@@ -1,6 +1,5 @@
 package com.yeongenn.kopringstudy.kopring.repository
 
-import com.yeongenn.kopringstudy.kopring.domain.dto.BookLoanRequest
 import com.yeongenn.kopringstudy.kopring.domain.entity.UserLoanHistory
 import com.yeongenn.kopringstudy.kopring.domain.entity.UserLoanStatus
 import org.springframework.data.jpa.repository.JpaRepository

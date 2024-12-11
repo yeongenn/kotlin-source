@@ -1,9 +1,9 @@
 package com.yeongenn.kopringstudy.kopring.service
 
-import com.yeongenn.kopringstudy.kopring.domain.dto.BookLoanRequest
-import com.yeongenn.kopringstudy.kopring.domain.dto.BookRequest
-import com.yeongenn.kopringstudy.kopring.domain.dto.BookReturnRequest
-import com.yeongenn.kopringstudy.kopring.domain.dto.BookStatResponse
+import com.yeongenn.kopringstudy.kopring.domain.dto.request.BookLoanRequest
+import com.yeongenn.kopringstudy.kopring.domain.dto.request.BookRequest
+import com.yeongenn.kopringstudy.kopring.domain.dto.request.BookReturnRequest
+import com.yeongenn.kopringstudy.kopring.domain.dto.response.BookStatResponse
 import com.yeongenn.kopringstudy.kopring.domain.entity.Book
 import com.yeongenn.kopringstudy.kopring.domain.entity.UserLoanStatus
 import com.yeongenn.kopringstudy.kopring.repository.*

@@ -1,4 +1,4 @@
-package com.yeongenn.kopringstudy.kopring.domain.dto
+package com.yeongenn.kopringstudy.kopring.domain.dto.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.yeongenn.kopringstudy.kopring.domain.entity.User

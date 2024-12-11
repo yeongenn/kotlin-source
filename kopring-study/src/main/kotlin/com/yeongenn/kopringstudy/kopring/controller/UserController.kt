@@ -1,6 +1,10 @@
 package com.yeongenn.kopringstudy.kopring.controller
 
-import com.yeongenn.kopringstudy.kopring.domain.dto.*
+import com.yeongenn.kopringstudy.kopring.domain.dto.request.UserCreateRequest
+import com.yeongenn.kopringstudy.kopring.domain.dto.request.UserUpdateRequest
+import com.yeongenn.kopringstudy.kopring.domain.dto.response.CommonResponseDto
+import com.yeongenn.kopringstudy.kopring.domain.dto.response.UserLoanHistoryResponse
+import com.yeongenn.kopringstudy.kopring.domain.dto.response.UserResponse
 import com.yeongenn.kopringstudy.kopring.service.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping

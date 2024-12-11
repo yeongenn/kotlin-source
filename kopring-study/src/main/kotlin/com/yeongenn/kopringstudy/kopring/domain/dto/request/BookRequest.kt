@@ -1,4 +1,4 @@
-package com.yeongenn.kopringstudy.kopring.domain.dto
+package com.yeongenn.kopringstudy.kopring.domain.dto.request
 
 import com.yeongenn.kopringstudy.kopring.domain.entity.BookType
 

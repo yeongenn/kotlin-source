@@ -1,7 +1,7 @@
 package com.yeongenn.kopringstudy.kopring.service
 
-import com.yeongenn.kopringstudy.kopring.domain.dto.UserCreateRequest
-import com.yeongenn.kopringstudy.kopring.domain.dto.UserUpdateRequest
+import com.yeongenn.kopringstudy.kopring.domain.dto.request.UserCreateRequest
+import com.yeongenn.kopringstudy.kopring.domain.dto.request.UserUpdateRequest
 import com.yeongenn.kopringstudy.kopring.domain.entity.User
 import com.yeongenn.kopringstudy.kopring.domain.entity.UserLoanHistory
 import com.yeongenn.kopringstudy.kopring.domain.entity.UserLoanStatus

@@ -2,8 +2,7 @@ package com.yeongenn.kopringstudy.kopring.repository
 
 import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory
-import com.yeongenn.kopringstudy.kopring.domain.dto.BookStatResponse
-import org.springframework.expression.spel.ast.Projection
+import com.yeongenn.kopringstudy.kopring.domain.dto.response.BookStatResponse
 import org.springframework.stereotype.Component
 import com.yeongenn.kopringstudy.kopring.domain.entity.QBook.book
 

@@ -1,4 +1,4 @@
-package com.yeongenn.kopringstudy.kopring.domain.dto
+package com.yeongenn.kopringstudy.kopring.domain.dto.request
 
 data class UserUpdateRequest(
     val userId: String, // 실습이라 id 직접 맵핑

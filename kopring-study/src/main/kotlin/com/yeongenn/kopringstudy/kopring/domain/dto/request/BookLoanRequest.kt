@@ -1,4 +1,4 @@
-package com.yeongenn.kopringstudy.kopring.domain.dto
+package com.yeongenn.kopringstudy.kopring.domain.dto.request
 
 data class BookLoanRequest(
     val userId: String,
