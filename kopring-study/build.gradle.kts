@@ -43,6 +43,8 @@ dependencies {
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")  // 최신 버전 사용
     implementation("com.querydsl:querydsl-kotlin:5.0.0") // 코틀린용 QueryDSL
     kapt("com.querydsl:querydsl-apt:5.0.0:jakarta") // QueryDSL 코드 생성용 APT
+
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
 }
 
 kotlin {
